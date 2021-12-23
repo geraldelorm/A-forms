@@ -1,4 +1,4 @@
-<div class="container w-50 p-3">
+<div class="container w-75 p-3">
   <h2>User Settings</h2>
 
   <form #form="ngForm" (ngSubmit)="onSubmit(form)">
@@ -9,7 +9,8 @@
         name="name"
         class="form-control"
         [(ngModel)]="userSettings.name"
-        required #nameField="ngModel"
+        required
+        #nameField="ngModel"
         (blur)="onBlur(nameField)"
         [class.field-error]="form.submitted && nameField.invalid"
       />
@@ -20,6 +21,16 @@
         Enter a name
       </div>
     </div>
+
+    <button
+      type="button"
+      class="btn btn-primary mb-2"
+      name="singleModel"
+      [(ngModel)]="singleModel"
+      btnCheckbox
+    >
+      {{ singleModel ? "On" : "Off" }}
+    </button>
 
     <div class="form-check form-group mb-2">
       <input
@@ -37,7 +48,36 @@
 
     <p>User Interface Style</p>
     <div class="form-group mb-2">
-      <div class="form-check">
+      <div class="btn-group">
+        <label
+          class="btn btn-primary"
+          [(ngModel)]="userSettings.style"
+          btnRadio="Light"
+          tabindex="0"
+          role="button"
+          name="style"
+          >Light</label
+        >
+        <label
+          class="btn btn-primary"
+          [(ngModel)]="userSettings.style"
+          btnRadio="Medium"
+          tabindex="0"
+          role="button"
+          name="style"
+          >Medium</label
+        >
+        <label
+          class="btn btn-primary"
+          [(ngModel)]="userSettings.style"
+          btnRadio="Dark"
+          tabindex="0"
+          role="button"
+          name="style"
+          >Dark</label
+        >
+      </div>
+      <!-- <div class="form-check">
         <input
           class="form-check-input"
           type="radio"
@@ -69,7 +109,30 @@
           [(ngModel)]="userSettings.style"
         />
         <label class="form-check-label" for="style3"> Dark </label>
-      </div>
+      </div> -->
+    </div>
+
+    <div class="form-group mb-2">
+      <label for="startDate"></label>
+      <input
+        type="text"
+        name="startDate"
+        id="startDate"
+        placeholder="Start Date"
+        [(ngModel)]="startDate"
+        class="form-control"
+        bsDatepicker
+      />
+    </div>
+
+    <div class="form-group mb-2">
+      <label for="startTime">StartTime</label>
+      <timepicker
+        [(ngModel)]="startTime"
+        name="startTime"
+        id="startTime"
+      ></timepicker>
+      <pre class="alert alert-info">Time is: {{ startTime }}</pre>
     </div>
 
     <div class="form-group mb-2">
@@ -80,8 +143,26 @@
         name="subscriptionType"
         [(ngModel)]="userSettings.subscriptionType"
       >
-        <option *ngFor="let type of subscriptionTypes | async">{{type}}</option>
+        <option *ngFor="let type of subscriptionTypes | async">
+          {{ type }}
+        </option>
       </select>
+    </div>
+
+    <div class="form-group mb-2">
+      User Rating
+      <rating
+        [(ngModel)]="rate"
+        [max]="max"
+        (onHover)="hoveringOver($event)"
+        name="rate"
+        id="rate"
+      ></rating>
+
+        <pre
+          class="card-block card-header"
+          style="margin: 15px 0"
+        >Rating: <b>{{rate}}</b></pre>
     </div>
 
     <div class="form-group mb-2">
@@ -96,7 +177,7 @@
     </div>
 
     <div [hidden]="!postError" class="alert alert-danger">
-      {{postErrorMessage}}
+      {{ postErrorMessage }}
     </div>
     <button class="btn btn-primary">Send</button>
   </form>

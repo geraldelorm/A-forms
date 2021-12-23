@@ -3,6 +3,7 @@ import { NgForm, NgModel } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { DataService } from '../data/data.service';
 import { UserSettings } from '../data/user-settings';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-user-settings-form',
@@ -24,11 +25,28 @@ export class UserSettingsFormComponent implements OnInit {
   postError = false;
   postErrorMessage = '';
   subscriptionTypes!: Observable<string[]>;
+  singleModel = true;
+  startDate!: Date;
+  startTime!: Date;
+
+  max = 10;
+  rate = 7;
+  isReadonly = false;
+
+  overStar: number | undefined;
+  percent = 0;
+
+  hoveringOver(value: number): void {
+    this.overStar = value;
+    this.percent = (value / this.max) * 100;
+  }
 
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
     this.subscriptionTypes = this.dataService.getSubscriptionTypes();
+    this.startDate = new Date();
+    this.startTime = new Date();
   }
 
   onBlur(field: NgModel) {
