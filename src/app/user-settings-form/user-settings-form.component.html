@@ -1,7 +1,7 @@
 <div class="container w-50 p-3">
   <h2>User Settings</h2>
 
-  <form #form="ngForm">
+  <form #form="ngForm" (ngSubmit)="onSubmit(form)">
     <div class="form-group mb-2">
       <label for="name">Name</label>
       <input
@@ -9,7 +9,16 @@
         name="name"
         class="form-control"
         [(ngModel)]="userSettings.name"
+        required #nameField="ngModel"
+        (blur)="onBlur(nameField)"
+        [class.field-error]="form.submitted && nameField.invalid"
       />
+      <div
+        [hidden]="!form.submitted || nameField.valid"
+        class="alert alert-danger"
+      >
+        Enter a name
+      </div>
     </div>
 
     <div class="form-check form-group mb-2">
@@ -71,9 +80,7 @@
         name="subscriptionType"
         [(ngModel)]="userSettings.subscriptionType"
       >
-        <option>Monthly</option>
-        <option>Annual</option>
-        <option>LifeTime</option>
+        <option *ngFor="let type of subscriptionTypes | async">{{type}}</option>
       </select>
     </div>
 
@@ -88,8 +95,11 @@
       ></textarea>
     </div>
 
+    <div [hidden]="!postError" class="alert alert-danger">
+      {{postErrorMessage}}
+    </div>
     <button class="btn btn-primary">Send</button>
   </form>
 </div>
-
-{{ userSettings | json }}
+<!-- 
+{{ userSettings | json }} -->
